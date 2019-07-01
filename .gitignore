@@ -87,3 +87,8 @@ typings/
 # DynamoDB Local files
 .dynamodb/ 
 package-lock.json
+
+# Uploaded Videos
+uploads
+videos
+.vscode
