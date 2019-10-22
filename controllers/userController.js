@@ -9,7 +9,7 @@ export const getJoin = (req, res) =>
 
 export const postJoin = async (req, res, next) => {
   const {
-    body: { name, email, password, password2 }
+    body: { name, username, email, password, password2 }
   } = req;
   if (password !== password2) {
     res.status(400);
@@ -17,6 +17,7 @@ export const postJoin = async (req, res, next) => {
     try {
       const user = User({
         name,
+        username,
         email
       });
       await User.register(user, password);
@@ -41,19 +42,21 @@ export const githubLogin = passport.authenticate("github");
 
 export const githubLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, avatar_url: avatarUrl, name, email }
+    _json: { id, avatar_url: avatarUrl, name, username, email }
   } = profile;
   try {
     const user = await User.findOne({ email });
     if (user) {
       user.githubId = id;
       user.avatarUrl = avatarUrl;
+      user.username = username;
       user.save();
       return cb(null, user);
     }
     const newUser = await User.create({
       email,
       name,
+      username,
       githubId: id,
       avatarUrl
     });
@@ -71,12 +74,13 @@ export const facebookLogin = passport.authenticate("facebook");
 
 export const facebookLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, name, email }
+    _json: { id, name, username, email }
   } = profile;
   try {
     const user = await User.findOne({ email });
     if (user) {
       user.facebookId = id;
+      user.username = username;
       user.avatarUrl = `https://graph.facebook.com/${id}/picture?type=large`;
       user.save();
       return cb(null, user);
@@ -128,12 +132,13 @@ export const getEditProfile = (req, res) =>
 
 export const postEditProfile = async (req, res) => {
   const {
-    body: { name, email },
+    body: { name, username, email },
     file
   } = req;
   try {
     await User.findByIdAndUpdate(req.user.id, {
       name,
+      username,
       email,
       avatarUrl: file ? file.path : req.user.avatarUrl
     });

@@ -1,3 +1,5 @@
+import getBlobDuration from "get-blob-duration";
+
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
 const playBtn = document.getElementById("jsPlayButton");
@@ -13,8 +15,9 @@ const registerView = () => {
     method: "POST"
   });
 };
+
 const handlePlayClick = event => {
-  console.log(event.target);
+  event.preventDefault();
   if (videoPlayer.paused) {
     videoPlayer.play();
     playBtn.innerHTML = '<i class="fas fa-pause"></i>';
@@ -87,8 +90,10 @@ const getCurrentTime = () => {
   currentTime.innerHTML = formatDate(Math.floor(videoPlayer.currentTime));
 };
 
-const setTotalTime = () => {
-  const totalTimeString = formatDate(videoPlayer.duration);
+const setTotalTime = async () => {
+  const blob = await fetch(videoPlayer.src).then(response => response.blob());
+  const duration = await getBlobDuration(blob);
+  const totalTimeString = formatDate(duration);
   totalTime.innerHTML = totalTimeString;
   setInterval(getCurrentTime, 1000);
 };
@@ -117,7 +122,6 @@ function handleDrag(event) {
 }
 
 const handleDoubleClick = () => {
-  console.log(document.fullscreenElement);
   if (document.fullscreenElement) {
     exitFullScreen();
   } else {

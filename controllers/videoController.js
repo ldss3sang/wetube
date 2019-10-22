@@ -72,7 +72,7 @@ export const videoDetail = async (req, res) => {
   try {
     const video = await Video.findById(id)
       .populate("creator")
-      .populate("comments");
+      .populate({ path: "comments", populate: "creator" });
     res.render("videoDetail", {
       pageTitle: video.title,
       video
@@ -175,7 +175,8 @@ export const postAddComment = async (req, res) => {
     video.comments.push(newComment.id);
     video.save();
     res.json({
-      id: newComment.id
+      id: newComment.id,
+      username: user.username
     });
   } catch (error) {
     res.status(400);

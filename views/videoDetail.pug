@@ -18,7 +18,7 @@ block content
                 span.video__views #{video.views} views
             .video__author
                 |Uploaded by 
-                a(href=routes.userDetail(video.creator.id))=video.creator.name
+                a(href=routes.userDetail(video.creator.id))=video.creator.username
         .video__comments
             if video.comments.length === 1
                 span.video__comment-number
@@ -33,7 +33,8 @@ block content
             ul.video__comments-list#jsCommentList
                 each comment in video.comments.reverse()
                     li
+                        span=comment.creator.username+" :"
                         span=comment.text
-                        if loggedUser && String(comment.creator) === loggedUser.id
+                        if loggedUser && String(comment.creator.id) === loggedUser.id
                             span(data-id=comment.id)
                                 i.fas.fa-trash-alt#jsDeleteBtn(title="Delete")

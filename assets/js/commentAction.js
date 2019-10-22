@@ -27,13 +27,16 @@ const deleteComment = async event => {
   }
 };
 
-const addComment = (id, comment) => {
+const addComment = (id, username, comment) => {
   const li = document.createElement("li");
+  const userSpan = document.createElement("span");
   const span = document.createElement("span");
   const iconSpan = document.createElement("span");
+  userSpan.innerHTML = `${username} :`;
   span.innerHTML = comment;
   iconSpan.innerHTML = '<i class="fas fa-trash-alt" title="Delete"></i>';
   iconSpan.dataset.id = id;
+  li.appendChild(userSpan);
   li.appendChild(span);
   li.appendChild(iconSpan);
   iconSpan.addEventListener("click", deleteComment);
@@ -51,7 +54,10 @@ const sendComment = async comment => {
     }
   });
   if (response.status === 200) {
-    addComment(response.data.id, comment);
+    const {
+      data: { id, username }
+    } = response;
+    addComment(id, username, comment);
   }
 };
 
@@ -65,7 +71,6 @@ const handleSubmit = event => {
 
 const init = () => {
   addCommentForm.addEventListener("submit", handleSubmit);
-  console.log(commentDeleteBtns);
   commentDeleteBtns.forEach(btn =>
     btn.addEventListener("click", deleteComment)
   );
