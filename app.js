@@ -8,10 +8,10 @@ import session from "express-session";
 import MongoStore from "connect-mongo";
 import cookieParser from "cookie-parser";
 import { localMiddleware } from "./middlewares";
-import userRouter from "../routers/userRouter";
-import videoRouter from "../routers/videoRouter";
-import globalRouter from "../routers/globalRouter";
-import apiRouter from "../routers/apiRouter";
+import userRouter from "./routers/userRouter";
+import videoRouter from "./routers/videoRouter";
+import globalRouter from "./routers/globalRouter";
+import apiRouter from "./routers/apiRouter";
 import routes from "./routes";
 
 import "./passport";

@@ -1,5 +1,5 @@
 import express from "express";
-import routes from "../src/routes";
+import routes from "../routes";
 import {
   postRegisterView,
   postAddComment,
