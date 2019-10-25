@@ -8,6 +8,10 @@ import {
 } from "./controllers/userController";
 import routes from "./routes";
 
+const hostURL = process.env.PRODUCTION
+  ? process.env.HOST_URL_PRD
+  : process.env.HOST_URL;
+
 passport.use(User.createStrategy());
 
 passport.use(
@@ -15,7 +19,7 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `http://localhost:3000${routes.githubCallback}`
+      callbackURL: `${hostURL}${routes.githubCallback}`
     },
     githubLoginCallback
   )
@@ -26,7 +30,7 @@ passport.use(
     {
       clientID: process.env.FB_ID,
       clientSecret: process.env.FB_SECRET,
-      callbackURL: `https://rude-pug-81.localtunnel.me${routes.facebookCallback}`,
+      callbackURL: `${hostURL}${routes.facebookCallback}`,
       profileFields: ["id", "displayName", "photos", "email"],
       scope: ["public_profile", "email"]
     },
