@@ -14,3 +14,4 @@ Cloning YouTube with Vanilla and Node JS
 - [x] Upload
 - [x] Video Detail
 - [x] Edit Video
+- [ ] Progress bar for Video Player

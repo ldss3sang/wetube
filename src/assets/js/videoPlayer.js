@@ -2,12 +2,16 @@ import getBlobDuration from "get-blob-duration";
 
 const videoContainer = document.getElementById("jsVideoPlayer");
 const videoPlayer = document.querySelector("#jsVideoPlayer video");
+const videoControl = document.getElementById("jsVideoControl");
 const playBtn = document.getElementById("jsPlayButton");
 const volumeBtn = document.getElementById("jsVolumeBtn");
 const fullScreenBtn = document.getElementById("jsFullScreen");
 const currentTime = document.getElementById("currentTime");
 const totalTime = document.getElementById("totalTime");
 const volumeRange = document.getElementById("jsVolume");
+
+const MINIMUM_MOUSE_STOP_TIME = 3000;
+let timeout;
 
 const registerView = () => {
   const videoId = window.location.href.split("/videos/")[1];
@@ -18,12 +22,14 @@ const registerView = () => {
 
 const handlePlayClick = event => {
   event.preventDefault();
-  if (videoPlayer.paused) {
-    videoPlayer.play();
-    playBtn.innerHTML = '<i class="fas fa-pause"></i>';
-  } else {
-    videoPlayer.pause();
-    playBtn.innerHTML = '<i class="fas fa-play"></i>';
+  if (videoControl.style.opacity === "1") {
+    if (videoPlayer.paused) {
+      videoPlayer.play();
+      playBtn.innerHTML = '<i class="fas fa-pause"></i>';
+    } else {
+      videoPlayer.pause();
+      playBtn.innerHTML = '<i class="fas fa-play"></i>';
+    }
   }
 };
 
@@ -129,6 +135,26 @@ const handleDoubleClick = () => {
   }
 };
 
+const hideHeaderControl = () => {
+  videoControl.style.opacity = 0;
+  playBtn.disabled = true;
+  videoContainer.style.cursor = "none";
+};
+const showHeaderControl = () => {
+  videoControl.style.opacity = 1;
+  playBtn.disabled = false;
+  videoContainer.style.cursor = "default";
+};
+
+const handleMouseMove = () => {
+  if (timeout) {
+    clearTimeout(timeout);
+  }
+  showHeaderControl();
+
+  timeout = setTimeout(hideHeaderControl, MINIMUM_MOUSE_STOP_TIME);
+};
+
 const init = () => {
   videoPlayer.volume = 0.5;
   videoContainer.addEventListener("dblclick", handleDoubleClick);
@@ -138,6 +164,7 @@ const init = () => {
   videoPlayer.addEventListener("loadedmetadata", setTotalTime);
   videoPlayer.addEventListener("ended", handleEnded);
   volumeRange.addEventListener("input", handleDrag);
+  videoPlayer.addEventListener("mousemove", handleMouseMove);
 };
 
 if (videoContainer) {
