@@ -1,12 +1,15 @@
 import passport from "passport";
 import GithubStrategy from "passport-github";
 import FacebookStrategy from "passport-facebook";
+import dotenv from "dotenv";
 import User from "./models/User";
 import {
   githubLoginCallback,
   facebookLoginCallback
 } from "./controllers/userController";
 import routes from "./routes";
+
+dotenv.config();
 
 const hostURL = process.env.PRODUCTION
   ? process.env.HOST_URL_PRD
@@ -19,7 +22,7 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `https://thawing-forest-41743.herokuapp.com${routes.githubCallback}`
+      callbackURL: `${hostURL}${routes.githubCallback}`
     },
     githubLoginCallback
   )
