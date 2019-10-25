@@ -19,7 +19,7 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `${hostURL}${routes.githubCallback}`
+      callbackURL: `https://thawing-forest-41743.herokuapp.com${routes.githubCallback}`
     },
     githubLoginCallback
   )
