@@ -22,7 +22,7 @@ passport.use(
     {
       clientID: process.env.GH_ID,
       clientSecret: process.env.GH_SECRET,
-      callbackURL: `${hostURL}${routes.githubCallback}`
+      callbackURL: hostURL + routes.githubCallback
     },
     githubLoginCallback
   )
