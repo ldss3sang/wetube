@@ -78,13 +78,13 @@ export const facebookLogin = passport.authenticate("facebook");
 
 export const facebookLoginCallback = async (_, __, profile, cb) => {
   const {
-    _json: { id, name, username, email }
+    _json: { id, name, email }
   } = profile;
   try {
     const user = await User.findOne({ email });
     if (user) {
       user.facebookId = id;
-      user.username = username;
+      user.username = user.username ? user.username : name;
       user.avatarUrl = `https://graph.facebook.com/${id}/picture?type=large`;
       user.save();
       return cb(null, user);
@@ -92,6 +92,7 @@ export const facebookLoginCallback = async (_, __, profile, cb) => {
     const newUser = await User.create({
       email,
       name,
+      username: name,
       facebookId: id,
       avatarUrl: `https://graph.facebook.com/${id}/picture?type=large`
     });

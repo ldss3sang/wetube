@@ -33,7 +33,7 @@ passport.use(
     {
       clientID: process.env.FB_ID,
       clientSecret: process.env.FB_SECRET,
-      callbackURL: `${hostURL}${routes.facebookCallback}`,
+      callbackURL: hostURL + routes.facebookCallback,
       profileFields: ["id", "displayName", "photos", "email"],
       scope: ["public_profile", "email"]
     },
